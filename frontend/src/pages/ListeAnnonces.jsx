@@ -1,34 +1,85 @@
 import { useEffect, useState } from 'react';
 import api from '../services/api';
 
+// Une icône par type de bien
+const icones = { appartement: '🏢', villa: '🏡', maison: '🏠' };
+
 export default function ListeAnnonces() {
   const [annonces, setAnnonces] = useState([]);
-  const [chargement, setChargement] = useState(true);
+  const [recherche, setRecherche] = useState('');
+  const [chargement, setChargement] = useState(true); // true au départ : pas besoin de le remettre dans l'effet
   const [erreur, setErreur] = useState('');
 
-  // Au chargement de la page, on demande les annonces à Laravel
-  useEffect(() => {
-    api.get('/annonces')
+  // Demande les annonces à Laravel (avec le mot recherché)
+  const charger = (mot) => {
+    api.get('/annonces', { params: { search: mot } })
       .then((reponse) => setAnnonces(reponse.data.data))
       .catch(() => setErreur('Impossible de charger les annonces'))
       .finally(() => setChargement(false));
+  };
+
+  // Au premier affichage, on charge toutes les annonces
+  useEffect(() => {
+    charger('');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (chargement) return <p>Chargement...</p>;
-  if (erreur) return <p className="erreur">{erreur}</p>;
+  // Quand on clique sur « Rechercher »
+  const chercher = (e) => {
+    e.preventDefault();
+    setChargement(true); // autorisé ici : c'est dans un événement, pas dans un effet
+    setErreur('');
+    charger(recherche);
+  };
 
   return (
     <div>
-      <h1>Nos annonces</h1>
+      <div className="hero">
+        <h1>Trouvez la maison<br />de vos rêves</h1>
+        <p>Appartements, villas et maisons à vendre ou à louer.</p>
+      </div>
+
+      <form className="recherche" onSubmit={chercher}>
+        <input
+          placeholder="Rechercher par titre, ville ou quartier..."
+          value={recherche}
+          onChange={(e) => setRecherche(e.target.value)}
+        />
+        <button className="btn" type="submit">Rechercher</button>
+      </form>
+
+      <h2 className="titre-section">Nos annonces</h2>
+
+      {erreur && <p className="erreur">{erreur}</p>}
+      {chargement && <p className="vide">Chargement...</p>}
+      {!chargement && annonces.length === 0 && <p className="vide">Aucune annonce trouvée.</p>}
+
       <div className="grille">
-        {annonces.map((a) => (
-          <div className="carte" key={a.id}>
-            <h3>{a.titre}</h3>
-            <p>{a.bien.ville} - {a.bien.superficie} m²</p>
-            <p className="prix">{Number(a.prix).toLocaleString('fr-FR')} MAD</p>
-            <span className="badge">{a.type_transaction}</span>
-          </div>
-        ))}
+        {annonces.map((a) => {
+          // Les détails sont dans appartement, villa ou maison selon le type
+          const details = a.bien.appartement || a.bien.villa || a.bien.maison;
+          return (
+            <div className="carte" key={a.id}>
+              <div className="image">
+                {icones[a.bien.type_bien]}
+                <span className={`badge ${a.type_transaction}`}>{a.type_transaction}</span>
+              </div>
+              <div className="contenu">
+                <h3>{a.titre}</h3>
+                <p className="lieu">📍 {a.bien.ville}</p>
+                <div className="infos">
+                  <span>📐 {Math.round(a.bien.superficie)} m²</span>
+                  {details && <span>🛏️ {details.chambres} ch.</span>}
+                  {details && <span>🚿 {details.salles_de_bain} sdb</span>}
+                </div>
+                <p className="prix">
+                  {Number(a.prix).toLocaleString('fr-FR')} MAD
+                  {a.type_transaction === 'location' && <small> / mois</small>}
+                </p>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
