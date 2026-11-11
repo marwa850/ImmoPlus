@@ -1,0 +1,12 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Arial, sans-serif; background: #f4f6f8; color: #222; }
+.container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
+.navbar { display: flex; justify-content: space-between; align-items: center;
+  background: #1e3a5f; padding: 15px 30px; }
+.navbar a { color: white; text-decoration: none; margin-left: 20px; }
+.navbar .logo { font-size: 22px; font-weight: bold; margin-left: 0; }
+.grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+.carte { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,.1); }
+.prix { color: #1e3a5f; font-weight: bold; font-size: 18px; }
+.badge { background: #e0ecff; color: #1e3a5f; padding: 4px 10px; border-radius: 12px; font-size: 13px; }
+.erreur { color: #c0392b; }
