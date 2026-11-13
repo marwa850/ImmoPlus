@@ -77,6 +77,25 @@ a { color: inherit; text-decoration: none; }
 .formulaire p { margin: 0; text-align: center; color: var(--gris); }
 .formulaire p a { color: var(--principal); font-weight: 600; }
 
+
+
+/* ---------- Page détail ---------- */
+.detail { padding-top: 24px; }
+.retour { color: var(--gris); font-weight: 500; }
+.retour:hover { color: var(--principal); }
+.detail-haut { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 20px 0 30px; }
+.detail-image { height: 340px; border-radius: 24px; display: flex; align-items: center; justify-content: center;
+  font-size: 110px; position: relative; background: linear-gradient(135deg, #e0e7ff, #ede9fe); }
+.detail-infos h1 { margin: 0 0 10px; font-size: 34px; }
+.prix.grand { font-size: 32px; margin: 16px 0; }
+.statut { color: var(--gris); text-transform: capitalize; }
+.bloc { background: white; border: 1px solid var(--bordure); border-radius: 22px; padding: 26px; margin-bottom: 20px; }
+.bloc h2 { margin: 0 0 16px; font-size: 20px; }
+.caracteristiques { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.caracteristiques div { display: flex; justify-content: space-between; background: var(--fond);
+  padding: 12px 16px; border-radius: 12px; }
+@media (max-width: 760px) { .detail-haut { grid-template-columns: 1fr; } }
+
 /* ---------- Messages ---------- */
 .erreur { background: #fef2f2; color: #b91c1c; padding: 12px 16px; border-radius: 12px; margin: 0; }
 .vide { text-align: center; color: var(--gris); padding: 40px; }

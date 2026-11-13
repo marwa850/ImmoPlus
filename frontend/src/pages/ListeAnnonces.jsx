@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../services/api';
 
 // Une icône par type de bien
@@ -7,7 +8,7 @@ const icones = { appartement: '🏢', villa: '🏡', maison: '🏠' };
 export default function ListeAnnonces() {
   const [annonces, setAnnonces] = useState([]);
   const [recherche, setRecherche] = useState('');
-  const [chargement, setChargement] = useState(true); // true au départ : pas besoin de le remettre dans l'effet
+  const [chargement, setChargement] = useState(true);
   const [erreur, setErreur] = useState('');
 
   // Demande les annonces à Laravel (avec le mot recherché)
@@ -27,7 +28,7 @@ export default function ListeAnnonces() {
   // Quand on clique sur « Rechercher »
   const chercher = (e) => {
     e.preventDefault();
-    setChargement(true); // autorisé ici : c'est dans un événement, pas dans un effet
+    setChargement(true);
     setErreur('');
     charger(recherche);
   };
@@ -59,7 +60,8 @@ export default function ListeAnnonces() {
           // Les détails sont dans appartement, villa ou maison selon le type
           const details = a.bien.appartement || a.bien.villa || a.bien.maison;
           return (
-            <div className="carte" key={a.id}>
+            // La carte entière est un lien vers la page détail
+            <Link to={`/annonces/${a.id}`} className="carte" key={a.id}>
               <div className="image">
                 {icones[a.bien.type_bien]}
                 <span className={`badge ${a.type_transaction}`}>{a.type_transaction}</span>
@@ -77,7 +79,7 @@ export default function ListeAnnonces() {
                   {a.type_transaction === 'location' && <small> / mois</small>}
                 </p>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>
