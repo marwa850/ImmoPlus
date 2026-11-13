@@ -109,6 +109,32 @@ a { color: inherit; text-decoration: none; }
 .pagination button:disabled { opacity: .4; cursor: not-allowed; }
 .carte { display: block; }
 
+
+
+
+/* ---------- Espace admin ---------- */
+.admin { padding-top: 30px; }
+.admin-haut { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.admin-haut h1 { margin: 0; }
+.tableau { width: 100%; border-collapse: collapse; background: white; border-radius: 16px; overflow: hidden;
+  border: 1px solid var(--bordure); }
+.tableau th { text-align: left; background: var(--fond); padding: 14px; font-size: 13px; color: var(--gris); text-transform: uppercase; }
+.tableau td { padding: 14px; border-top: 1px solid var(--bordure); }
+.tableau select { padding: 6px 10px; border: 1px solid var(--bordure); border-radius: 8px; font-family: inherit; }
+.actions { display: flex; gap: 8px; }
+.actions .btn { padding: 7px 14px; font-size: 13px; }
+.btn-danger { background: #ef4444; }
+.btn-danger:hover { box-shadow: 0 8px 20px rgba(239,68,68,.4); }
+.formulaire.large { max-width: 640px; }
+.ligne { display: flex; gap: 12px; }
+.ligne > * { flex: 1; min-width: 0; }
+.cases { display: flex; gap: 20px; flex-wrap: wrap; }
+.cases label { display: flex; align-items: center; gap: 6px; }
+.cases input { width: auto; }
+
+
+
+
 /* ---------- Messages ---------- */
 .erreur { background: #fef2f2; color: #b91c1c; padding: 12px 16px; border-radius: 12px; margin: 0; }
 .vide { text-align: center; color: var(--gris); padding: 40px; }
