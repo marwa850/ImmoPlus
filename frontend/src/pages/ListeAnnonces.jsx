@@ -2,35 +2,56 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 
-// Une icône par type de bien
 const icones = { appartement: '🏢', villa: '🏡', maison: '🏠' };
+
+// Valeurs de départ des filtres
+const filtresVides = {
+  search: '', ville: '', type_bien: '', type_transaction: '',
+  prix_min: '', prix_max: '', tri: 'date', ordre: 'desc',
+};
 
 export default function ListeAnnonces() {
   const [annonces, setAnnonces] = useState([]);
-  const [recherche, setRecherche] = useState('');
+  const [filtres, setFiltres] = useState(filtresVides);
+  const [page, setPage] = useState(1);
+  const [derniere, setDerniere] = useState(1);
   const [chargement, setChargement] = useState(true);
   const [erreur, setErreur] = useState('');
 
-  // Demande les annonces à Laravel (avec le mot recherché)
-  const charger = (mot) => {
-    api.get('/annonces', { params: { search: mot } })
-      .then((reponse) => setAnnonces(reponse.data.data))
+  // Demande les annonces à Laravel avec les filtres et la page
+  const charger = (f, p) => {
+    api.get('/annonces', { params: { ...f, page: p } })
+      .then((reponse) => {
+        setAnnonces(reponse.data.data);
+        setDerniere(reponse.data.last_page);
+      })
       .catch(() => setErreur('Impossible de charger les annonces'))
       .finally(() => setChargement(false));
   };
 
-  // Au premier affichage, on charge toutes les annonces
+  // Premier affichage
   useEffect(() => {
-    charger('');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    charger(filtresVides, 1);
   }, []);
 
-  // Quand on clique sur « Rechercher »
-  const chercher = (e) => {
-    e.preventDefault();
+  // Met à jour un champ de filtre
+  const changer = (e) => setFiltres({ ...filtres, [e.target.name]: e.target.value });
+
+  const lancer = (f, p) => {
     setChargement(true);
     setErreur('');
-    charger(recherche);
+    setPage(p);
+    charger(f, p);
+  };
+
+  const chercher = (e) => {
+    e.preventDefault();
+    lancer(filtres, 1);
+  };
+
+  const reinitialiser = () => {
+    setFiltres(filtresVides);
+    lancer(filtresVides, 1);
   };
 
   return (
@@ -41,12 +62,37 @@ export default function ListeAnnonces() {
       </div>
 
       <form className="recherche" onSubmit={chercher}>
-        <input
-          placeholder="Rechercher par titre, ville ou quartier..."
-          value={recherche}
-          onChange={(e) => setRecherche(e.target.value)}
-        />
+        <input name="search" placeholder="Rechercher par titre, ville ou quartier..."
+          value={filtres.search} onChange={changer} />
         <button className="btn" type="submit">Rechercher</button>
+      </form>
+
+      {/* ---------- Filtres ---------- */}
+      <form className="filtres" onSubmit={chercher}>
+        <input name="ville" placeholder="Ville" value={filtres.ville} onChange={changer} />
+        <select name="type_bien" value={filtres.type_bien} onChange={changer}>
+          <option value="">Tous les biens</option>
+          <option value="appartement">Appartement</option>
+          <option value="villa">Villa</option>
+          <option value="maison">Maison</option>
+        </select>
+        <select name="type_transaction" value={filtres.type_transaction} onChange={changer}>
+          <option value="">Vente et location</option>
+          <option value="vente">Vente</option>
+          <option value="location">Location</option>
+        </select>
+        <input name="prix_min" type="number" placeholder="Prix min" value={filtres.prix_min} onChange={changer} />
+        <input name="prix_max" type="number" placeholder="Prix max" value={filtres.prix_max} onChange={changer} />
+        <select name="tri" value={filtres.tri} onChange={changer}>
+          <option value="date">Trier par date</option>
+          <option value="prix">Trier par prix</option>
+        </select>
+        <select name="ordre" value={filtres.ordre} onChange={changer}>
+          <option value="desc">Décroissant</option>
+          <option value="asc">Croissant</option>
+        </select>
+        <button className="btn" type="submit">Filtrer</button>
+        <button className="btn btn-clair" type="button" onClick={reinitialiser}>Réinitialiser</button>
       </form>
 
       <h2 className="titre-section">Nos annonces</h2>
@@ -57,10 +103,8 @@ export default function ListeAnnonces() {
 
       <div className="grille">
         {annonces.map((a) => {
-          // Les détails sont dans appartement, villa ou maison selon le type
           const details = a.bien.appartement || a.bien.villa || a.bien.maison;
           return (
-            // La carte entière est un lien vers la page détail
             <Link to={`/annonces/${a.id}`} className="carte" key={a.id}>
               <div className="image">
                 {icones[a.bien.type_bien]}
@@ -83,6 +127,17 @@ export default function ListeAnnonces() {
           );
         })}
       </div>
+
+      {/* ---------- Pagination (F9) ---------- */}
+      {derniere > 1 && (
+        <div className="pagination">
+          <button className="btn btn-clair" disabled={page <= 1}
+            onClick={() => lancer(filtres, page - 1)}>← Précédent</button>
+          <span>Page {page} / {derniere}</span>
+          <button className="btn btn-clair" disabled={page >= derniere}
+            onClick={() => lancer(filtres, page + 1)}>Suivant →</button>
+        </div>
+      )}
     </div>
   );
 }
