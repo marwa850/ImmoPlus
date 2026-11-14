@@ -1,38 +1,45 @@
 <?php
 
 use App\Http\Controllers\AdminAnnonceController;
+use App\Http\Controllers\AdminOffreController;
+use App\Http\Controllers\AdminVisiteController;
 use App\Http\Controllers\AnnonceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FavoriController;
+use App\Http\Controllers\OffreController;
+use App\Http\Controllers\VisiteController;
 use Illuminate\Support\Facades\Route;
 
-// ---------- Routes publiques (sans token) ----------
+// ---------- Routes publiques ----------
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/annonces', [AnnonceController::class, 'index']);
 Route::get('/annonces/{id}', [AnnonceController::class, 'show']);
 
-// ---------- Routes pour un utilisateur connecté (token obligatoire) ----------
+// ---------- Utilisateur connecté ----------
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 
-    // Favoris (les ids doivent être déclarés avant la route avec paramètre)
+    // Favoris
     Route::get('/favoris', [FavoriController::class, 'index']);
     Route::get('/favoris/ids', [FavoriController::class, 'ids']);
     Route::post('/favoris/{annonceId}', [FavoriController::class, 'basculer']);
 
-    // Les routes visites, offres et notifications viendront ici
+    // Visites
+    Route::get('/visites', [VisiteController::class, 'index']);
+    Route::post('/visites', [VisiteController::class, 'store']);
+    Route::patch('/visites/{id}/annuler', [VisiteController::class, 'annuler']);
+
+    // Offres
+    Route::get('/offres', [OffreController::class, 'index']);
+    Route::post('/offres', [OffreController::class, 'store']);
 });
 
-// ---------- Routes réservées à l'administrateur ----------
+// ---------- Administrateur ----------
 Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/test', function () {
-        return response()->json(['message' => 'Bienvenue administrateur']);
-    });
-
-    // CRUD des annonces
+    // Annonces
     Route::get('/annonces', [AdminAnnonceController::class, 'index']);
     Route::get('/annonces/{id}', [AdminAnnonceController::class, 'show']);
     Route::post('/annonces', [AdminAnnonceController::class, 'store']);
@@ -40,5 +47,11 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::delete('/annonces/{id}', [AdminAnnonceController::class, 'destroy']);
     Route::patch('/annonces/{id}/statut', [AdminAnnonceController::class, 'changerStatut']);
 
-    // Les routes visites, offres, clients et stats viendront ici
+    // Visites
+    Route::get('/visites', [AdminVisiteController::class, 'index']);
+    Route::patch('/visites/{id}', [AdminVisiteController::class, 'traiter']);
+
+    // Offres
+    Route::get('/offres', [AdminOffreController::class, 'index']);
+    Route::patch('/offres/{id}', [AdminOffreController::class, 'traiter']);
 });

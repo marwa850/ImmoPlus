@@ -5,9 +5,11 @@ import ListeAnnonces from './pages/ListeAnnonces';
 import DetailAnnonce from './pages/DetailAnnonce';
 import Connexion from './pages/Connexion';
 import Inscription from './pages/Inscription';
+import MesFavoris from './pages/MesFavoris';
+import MesDemandes from './pages/MesDemandes';
 import AdminAnnonces from './pages/admin/AdminAnnonces';
 import FormAnnonce from './pages/admin/FormAnnonce';
-import MesFavoris from './pages/MesFavoris';
+import AdminDemandes from './pages/admin/AdminDemandes';
 
 export default function App() {
   return (
@@ -19,12 +21,16 @@ export default function App() {
           <Route path="/annonces/:id" element={<DetailAnnonce />} />
           <Route path="/connexion" element={<Connexion />} />
           <Route path="/inscription" element={<Inscription />} />
+
+          {/* Espace client */}
           <Route path="/favoris" element={<MesFavoris />} />
+          <Route path="/mes-demandes" element={<MesDemandes />} />
 
           {/* Espace administrateur (protégé) */}
           <Route path="/admin/annonces" element={<RouteAdmin><AdminAnnonces /></RouteAdmin>} />
           <Route path="/admin/annonces/nouvelle" element={<RouteAdmin><FormAnnonce /></RouteAdmin>} />
           <Route path="/admin/annonces/:id/modifier" element={<RouteAdmin><FormAnnonce /></RouteAdmin>} />
+          <Route path="/admin/demandes" element={<RouteAdmin><AdminDemandes /></RouteAdmin>} />
         </Routes>
       </main>
     </>
