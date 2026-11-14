@@ -7,6 +7,7 @@ import Connexion from './pages/Connexion';
 import Inscription from './pages/Inscription';
 import AdminAnnonces from './pages/admin/AdminAnnonces';
 import FormAnnonce from './pages/admin/FormAnnonce';
+import MesFavoris from './pages/MesFavoris';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           <Route path="/annonces/:id" element={<DetailAnnonce />} />
           <Route path="/connexion" element={<Connexion />} />
           <Route path="/inscription" element={<Inscription />} />
+          <Route path="/favoris" element={<MesFavoris />} />
 
           {/* Espace administrateur (protégé) */}
           <Route path="/admin/annonces" element={<RouteAdmin><AdminAnnonces /></RouteAdmin>} />

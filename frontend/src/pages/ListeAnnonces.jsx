@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
+import BoutonFavori from '../components/BoutonFavori';
+import { useAuth } from '../context/useAuth';
 
 const icones = { appartement: '🏢', villa: '🏡', maison: '🏠' };
 
@@ -11,7 +13,9 @@ const filtresVides = {
 };
 
 export default function ListeAnnonces() {
+  const { user } = useAuth();
   const [annonces, setAnnonces] = useState([]);
+  const [favoris, setFavoris] = useState([]);
   const [filtres, setFiltres] = useState(filtresVides);
   const [page, setPage] = useState(1);
   const [derniere, setDerniere] = useState(1);
@@ -33,6 +37,19 @@ export default function ListeAnnonces() {
   useEffect(() => {
     charger(filtresVides, 1);
   }, []);
+
+  // Charge les identifiants des favoris du client connecté
+  useEffect(() => {
+    if (user?.role.nom === 'client') {
+      api.get('/favoris/ids').then((r) => setFavoris(r.data));
+    }
+  }, [user]);
+
+  // Ajoute ou retire un favori
+  const basculer = async (id) => {
+    const r = await api.post(`/favoris/${id}`);
+    setFavoris(r.data.favori ? [...favoris, id] : favoris.filter((f) => f !== id));
+  };
 
   // Met à jour un champ de filtre
   const changer = (e) => setFiltres({ ...filtres, [e.target.name]: e.target.value });
@@ -109,6 +126,8 @@ export default function ListeAnnonces() {
               <div className="image">
                 {icones[a.bien.type_bien]}
                 <span className={`badge ${a.type_transaction}`}>{a.type_transaction}</span>
+                {/* Cœur visible seulement pour un client connecté */}
+                <BoutonFavori id={a.id} favoris={favoris} onBasculer={basculer} />
               </div>
               <div className="contenu">
                 <h3>{a.titre}</h3>
