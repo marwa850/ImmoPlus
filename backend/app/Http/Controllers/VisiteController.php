@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Annonce;
 use App\Models\Visite;
 use Illuminate\Http\Request;
+use App\Services\Notifier;
 
 class VisiteController extends Controller
 {
@@ -55,6 +56,10 @@ class VisiteController extends Controller
             'statut'         => 'en_attente',
         ]);
 
+        Notifier::aLAdmin(
+            $request->user()->prenom . ' ' . $request->user()->nom . ' demande une visite pour « ' . $annonce->titre . ' »',
+            'visite'
+        );
         return response()->json($visite, 201);
     }
 

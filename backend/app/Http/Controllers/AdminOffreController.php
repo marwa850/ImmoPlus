@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Offre;
+use App\Services\Notifier;
 use Illuminate\Http\Request;
 
 class AdminOffreController extends Controller
@@ -32,6 +33,13 @@ class AdminOffreController extends Controller
         if ($data['statut'] === 'acceptee') {
             $offre->annonce->update(['statut' => 'reservee']);
         }
+
+        // F23 : le client est notifié dans les deux cas (acceptée ou refusée)
+        Notifier::vers(
+            $offre->utilisateur_id,
+            'Votre offre pour « ' . $offre->annonce->titre . ' » a été ' . ($data['statut'] === 'acceptee' ? 'acceptée' : 'refusée'),
+            'offre'
+        );
 
         return response()->json($offre->load(['utilisateur', 'annonce.bien']));
     }

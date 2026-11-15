@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Visite;
 use Illuminate\Http\Request;
+use App\Services\Notifier;
 
 class AdminVisiteController extends Controller
 {
@@ -30,7 +31,27 @@ class AdminVisiteController extends Controller
             $visite->date_visite = $data['date_visite'];
         }
         $visite->save();
+                $visite->load('annonce');
+        $libelles = ['confirmee' => 'confirmée', 'refusee' => 'refusée', 'annulee' => 'annulée'];
+
+        Notifier::vers(
+            $visite->utilisateur_id,
+            'Votre visite pour « ' . $visite->annonce->titre . ' » est ' . $libelles[$data['statut']],
+            'visite'
+        );
 
         return response()->json($visite->load(['utilisateur', 'annonce.bien']));
+    }
+
+        // Visites prévues aujourd'hui (F25)
+    public function aujourdhui()
+    {
+        return response()->json(
+            Visite::with(['utilisateur', 'annonce.bien'])
+                ->whereDate('date_visite', today())
+                ->whereIn('statut', ['en_attente', 'confirmee'])
+                ->orderBy('date_visite')
+                ->get()
+        );
     }
 }

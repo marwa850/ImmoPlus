@@ -10,6 +10,7 @@ import MesDemandes from './pages/MesDemandes';
 import AdminAnnonces from './pages/admin/AdminAnnonces';
 import FormAnnonce from './pages/admin/FormAnnonce';
 import AdminDemandes from './pages/admin/AdminDemandes';
+import Notifications from './pages/Notifications';
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
           {/* Espace client */}
           <Route path="/favoris" element={<MesFavoris />} />
           <Route path="/mes-demandes" element={<MesDemandes />} />
+          <Route path="/notifications" element={<Notifications />} />
 
           {/* Espace administrateur (protégé) */}
           <Route path="/admin/annonces" element={<RouteAdmin><AdminAnnonces /></RouteAdmin>} />

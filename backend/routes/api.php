@@ -9,6 +9,7 @@ use App\Http\Controllers\FavoriController;
 use App\Http\Controllers\OffreController;
 use App\Http\Controllers\VisiteController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\NotificationController;
 
 // ---------- Routes publiques ----------
 Route::post('/register', [AuthController::class, 'register']);
@@ -35,6 +36,12 @@ Route::middleware('auth:sanctum')->group(function () {
     // Offres
     Route::get('/offres', [OffreController::class, 'index']);
     Route::post('/offres', [OffreController::class, 'store']);
+
+        // Notifications
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::get('/notifications/non-lues', [NotificationController::class, 'nonLues']);
+    Route::patch('/notifications/tout-lire', [NotificationController::class, 'toutLire']);
+    Route::patch('/notifications/{id}/lue', [NotificationController::class, 'marquerLue']);
 });
 
 // ---------- Administrateur ----------
@@ -54,4 +61,7 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     // Offres
     Route::get('/offres', [AdminOffreController::class, 'index']);
     Route::patch('/offres/{id}', [AdminOffreController::class, 'traiter']);
+
+
+    Route::get('/visites/aujourdhui', [AdminVisiteController::class, 'aujourdhui']);
 });

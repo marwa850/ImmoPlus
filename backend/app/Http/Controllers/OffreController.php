@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Annonce;
 use App\Models\Offre;
 use Illuminate\Http\Request;
+use App\Services\Notifier;
 
 class OffreController extends Controller
 {
@@ -54,6 +55,11 @@ class OffreController extends Controller
             'date_offre'     => now(),
             'statut'         => 'en_attente',
         ]);
+        
+        Notifier::aLAdmin(
+            $request->user()->prenom . ' ' . $request->user()->nom . ' propose ' . number_format($data['montant'], 0, ',', ' ') . ' MAD pour « ' . $annonce->titre . ' »',
+            'offre'
+        );
 
         return response()->json($offre, 201);
     }

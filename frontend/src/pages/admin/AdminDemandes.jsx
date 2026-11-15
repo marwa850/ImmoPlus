@@ -6,11 +6,13 @@ const Statut = ({ valeur }) => <span className={`statut-badge ${valeur}`}>{valeu
 export default function AdminDemandes() {
   const [visites, setVisites] = useState([]);
   const [offres, setOffres] = useState([]);
+  const [aujourdhui, setAujourdhui] = useState([]);
   const [erreur, setErreur] = useState('');
 
   const charger = () => {
     api.get('/admin/visites').then((r) => setVisites(r.data));
     api.get('/admin/offres').then((r) => setOffres(r.data));
+    api.get('/admin/visites/aujourdhui').then((r) => setAujourdhui(r.data));
   };
 
   useEffect(() => {
@@ -50,6 +52,19 @@ export default function AdminDemandes() {
   return (
     <div className="admin">
       {erreur && <p className="erreur">{erreur}</p>}
+
+      {/* ---------- Visites d'aujourd'hui (F25) ---------- */}
+      <div className="bloc">
+        <h2>📆 Visites d'aujourd'hui ({aujourdhui.length})</h2>
+        {aujourdhui.length === 0 && <p className="vide">Aucune visite prévue aujourd'hui.</p>}
+        {aujourdhui.map((v) => (
+          <p key={v.id}>
+            🕒 {new Date(v.date_visite).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+            {' · '}{v.utilisateur.prenom} {v.utilisateur.nom} · {v.annonce.titre}
+            {' '}<Statut valeur={v.statut} />
+          </p>
+        ))}
+      </div>
 
       <h1>Demandes de visite</h1>
       <table className="tableau">
