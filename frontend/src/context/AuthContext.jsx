@@ -37,9 +37,14 @@ export function AuthProvider({ children }) {
       setUser(null);
     }
   };
+    // Met à jour l'utilisateur après modification du profil
+  const majUser = (u) => {
+    localStorage.setItem('user', JSON.stringify(u));
+    setUser(u);
+  };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout, majUser }}>
       {children}
     </AuthContext.Provider>
   );

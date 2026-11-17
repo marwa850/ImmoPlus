@@ -14,6 +14,7 @@ import Notifications from './pages/Notifications';
 import AdminClients from './pages/admin/AdminClients';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import DashboardClient from './pages/DashboardClient';
+import Profil from './pages/Profil';
 
 export default function App() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="/admin/clients" element={<RouteAdmin><AdminClients /></RouteAdmin>} />
           <Route path="/tableau-de-bord" element={<DashboardClient />} />
           <Route path="/admin" element={<RouteAdmin><AdminDashboard /></RouteAdmin>} />
+          <Route path="/profil" element={<Profil />} />
         </Routes>
       </main>
     </>

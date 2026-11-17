@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AdminClientController;
 use App\Http\Controllers\StatsController;
+use App\Http\Controllers\ProfilController;
 
 // ---------- Routes publiques ----------
 Route::post('/register', [AuthController::class, 'register']);
@@ -45,6 +46,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/notifications/tout-lire', [NotificationController::class, 'toutLire']);
     Route::patch('/notifications/{id}/lue', [NotificationController::class, 'marquerLue']);
     Route::get('/stats/client', [StatsController::class, 'client']);
+
+     Route::put('/profil', [ProfilController::class, 'update']);
+    Route::put('/profil/mot-de-passe', [ProfilController::class, 'motDePasse']);
 });
 
 // ---------- Administrateur ----------
@@ -73,4 +77,5 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::patch('/clients/{id}/actif', [AdminClientController::class, 'basculerActif']);
 
         Route::get('/stats', [StatsController::class, 'admin']);
+            Route::get('/stats/evolution', [StatsController::class, 'evolution']);
 });

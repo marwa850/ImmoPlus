@@ -43,7 +43,7 @@ export default function Navbar() {
             <Link to="/notifications" className="cloche">
               🔔{nonLues > 0 && <span className="pastille">{nonLues}</span>}
             </Link>
-            <span className="bonjour">Bonjour {user.prenom}</span>
+            <Link to="/profil" className="bonjour">Bonjour {user.prenom}</Link>
             <button className="btn btn-clair" onClick={deconnecter}>Déconnexion</button>
           </>
         ) : (
