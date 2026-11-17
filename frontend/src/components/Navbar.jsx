@@ -35,6 +35,9 @@ export default function Navbar() {
         {user?.role.nom === 'admin' && <Link to="/admin/demandes">Demandes</Link>}
         {user?.role.nom === 'admin' && <Link to="/admin/clients">Clients</Link>}
 
+        {user?.role.nom === 'client' && <Link to="/tableau-de-bord">Tableau de bord</Link>}
+        {user?.role.nom === 'admin' && <Link to="/admin">Tableau de bord</Link>}
+
         {user ? (
           <>
             <Link to="/notifications" className="cloche">

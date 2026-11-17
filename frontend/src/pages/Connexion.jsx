@@ -15,7 +15,7 @@ export default function Connexion() {
     try {
       const user = await login(email, motDePasse);
       // L'admin va vers son espace, le client vers l'accueil
-      navigate(user.role.nom === 'admin' ? '/admin/annonces' : '/');
+      navigate(user.role.nom === 'admin' ? '/admin' : '/');
     } catch (err) {
       setErreur(err.response?.data?.message || 'Erreur de connexion');
     }
