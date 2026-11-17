@@ -164,6 +164,11 @@ a { color: inherit; text-decoration: none; }
 .notif.non-lue { border-left: 4px solid var(--principal); background: #eef2ff; }
 .notif-icone { font-size: 24px; }
 
+/* ---------- Gestion des clients ---------- */
+.form-client { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+.form-client input { padding: 11px 14px; border: 1px solid var(--bordure); border-radius: 10px;
+  font-family: inherit; font-size: 15px; background: var(--fond); }
+
 /* ---------- Messages ---------- */
 .erreur { background: #fef2f2; color: #b91c1c; padding: 12px 16px; border-radius: 12px; margin: 0; }
 .vide { text-align: center; color: var(--gris); padding: 40px; }

@@ -11,6 +11,7 @@ import AdminAnnonces from './pages/admin/AdminAnnonces';
 import FormAnnonce from './pages/admin/FormAnnonce';
 import AdminDemandes from './pages/admin/AdminDemandes';
 import Notifications from './pages/Notifications';
+import AdminClients from './pages/admin/AdminClients';
 
 export default function App() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
           <Route path="/admin/annonces/nouvelle" element={<RouteAdmin><FormAnnonce /></RouteAdmin>} />
           <Route path="/admin/annonces/:id/modifier" element={<RouteAdmin><FormAnnonce /></RouteAdmin>} />
           <Route path="/admin/demandes" element={<RouteAdmin><AdminDemandes /></RouteAdmin>} />
+          <Route path="/admin/clients" element={<RouteAdmin><AdminClients /></RouteAdmin>} />
         </Routes>
       </main>
     </>

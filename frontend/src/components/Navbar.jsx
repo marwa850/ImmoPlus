@@ -33,6 +33,7 @@ export default function Navbar() {
 
         {user?.role.nom === 'admin' && <Link to="/admin/annonces">Administration</Link>}
         {user?.role.nom === 'admin' && <Link to="/admin/demandes">Demandes</Link>}
+        {user?.role.nom === 'admin' && <Link to="/admin/clients">Clients</Link>}
 
         {user ? (
           <>

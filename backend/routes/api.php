@@ -10,6 +10,7 @@ use App\Http\Controllers\OffreController;
 use App\Http\Controllers\VisiteController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\AdminClientController;
 
 // ---------- Routes publiques ----------
 Route::post('/register', [AuthController::class, 'register']);
@@ -64,4 +65,8 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
 
 
     Route::get('/visites/aujourdhui', [AdminVisiteController::class, 'aujourdhui']);
+        // Clients
+    Route::get('/clients', [AdminClientController::class, 'index']);
+    Route::put('/clients/{id}', [AdminClientController::class, 'update']);
+    Route::patch('/clients/{id}/actif', [AdminClientController::class, 'basculerActif']);
 });
