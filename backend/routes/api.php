@@ -13,6 +13,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AdminClientController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\ExportController;
 
 // ---------- Routes publiques ----------
 Route::post('/register', [AuthController::class, 'register']);
@@ -78,4 +79,11 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
 
         Route::get('/stats', [StatsController::class, 'admin']);
             Route::get('/stats/evolution', [StatsController::class, 'evolution']);
+
+
+        // Exports
+    Route::get('/export/annonces', [ExportController::class, 'annonces']);
+    Route::get('/export/offres', [ExportController::class, 'offres']);
+    Route::get('/export/visites', [ExportController::class, 'visites']);
+    Route::get('/export/stats', [ExportController::class, 'statistiques']);
 });

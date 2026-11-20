@@ -15,6 +15,7 @@ import AdminClients from './pages/admin/AdminClients';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import DashboardClient from './pages/DashboardClient';
 import Profil from './pages/Profil';
+import AdminExports from './pages/admin/AdminExports';
 
 export default function App() {
   return (
@@ -41,6 +42,7 @@ export default function App() {
           <Route path="/tableau-de-bord" element={<DashboardClient />} />
           <Route path="/admin" element={<RouteAdmin><AdminDashboard /></RouteAdmin>} />
           <Route path="/profil" element={<Profil />} />
+          <Route path="/admin/exports" element={<RouteAdmin><AdminExports /></RouteAdmin>} />
         </Routes>
       </main>
     </>
